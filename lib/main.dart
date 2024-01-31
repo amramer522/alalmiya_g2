@@ -1,53 +1,92 @@
-import 'package:alalmiya_g2/views/auth/forget_password/view.dart';
-import 'package:alalmiya_g2/views/auth/splash/view.dart';
+import 'package:alalmiya_g2/core/logic/cache_helper.dart';
+import 'package:alalmiya_g2/views/auth/login/view.dart';
+import 'package:alalmiya_g2/views/auth/register/view.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'core/logic/helper_methods.dart';
-import 'views/auth/login/view.dart';
-import 'views/auth/register/view.dart';
-import 'views/my_orders/view.dart';
-import 'views/notifications/view.dart';
+import 'features/categories/cubit.dart';
+import 'features/get_cities/bloc.dart';
+import 'features/get_cities/events.dart';
+import 'features/products/cubit.dart';
+import 'features/slider/cubit.dart';
+import 'views/auth/confirm_code/bloc.dart';
+import 'views/auth/confirm_code/view.dart';
+import 'views/mix/view.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await CacheHelper.init();
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    statusBarColor: getMyMaterialColor(), // status bar color
+  ));
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      navigatorKey: navigatorKey,
-      theme: ThemeData(
-          primarySwatch: getMyMaterialColor(),
-          scaffoldBackgroundColor: Colors.white,
-          appBarTheme: AppBarTheme(
-              backgroundColor: Colors.white,
-              elevation: 0,
-              titleTextStyle: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: getMyMaterialColor(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => SliderCubit()..getData(),
+        ),
+        BlocProvider(
+          create: (context) => GetCitiesBloc()..add(GetCitiesEvent()),
+        ),
+        BlocProvider(
+          create: (BuildContext context) => CategoriesCubit()..getData(),
+        ),
+        BlocProvider(
+          create: (BuildContext context) => ProductsCubit()..getData(),
+        ),
+        BlocProvider(
+          create: (BuildContext context) => ConfirmCodeBloc(),
+        ),
+      ],
+      child: ScreenUtilInit(
+        designSize: Size(375, 812),
+        minTextAdapt: true,
+        splitScreenMode: true,
+        builder: (context, child) => MaterialApp(
+          debugShowCheckedModeBanner: false,
+          navigatorKey: navigatorKey,
+          theme: ThemeData(
+              primarySwatch: getMyMaterialColor(),
+              scaffoldBackgroundColor: Colors.white,
+              appBarTheme: AppBarTheme(
+                  backgroundColor: Colors.white,
+                  elevation: 0,
+                  centerTitle: true,
+                  titleTextStyle: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: getMyMaterialColor(),
+                  )),
+              filledButtonTheme: FilledButtonThemeData(style: FilledButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)), fixedSize: Size.fromHeight(60))),
+              outlinedButtonTheme: OutlinedButtonThemeData(
+                  style: OutlinedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      side: BorderSide(color: getMyMaterialColor()))),
+              inputDecorationTheme: InputDecorationTheme(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                disabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(15), borderSide: BorderSide(color: Color(0xffF3F3F3))),
+                enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(15), borderSide: BorderSide(color: Color(0xffF3F3F3))),
+                filled: true,
+                fillColor: Colors.white,
+
               )),
-          filledButtonTheme: FilledButtonThemeData(style: FilledButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)), fixedSize: Size.fromHeight(60))),
-          outlinedButtonTheme: OutlinedButtonThemeData(
-              style: OutlinedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  side: BorderSide(color: getMyMaterialColor()))),
-          inputDecorationTheme: InputDecorationTheme(
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
-            ),
-            disabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(15), borderSide: BorderSide(color: Color(0xffF3F3F3))),
-            enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(15), borderSide: BorderSide(color: Color(0xffF3F3F3))),
-            filled: true,
-            fillColor: Colors.white,
-          )),
-      builder: (context, child) => Directionality(textDirection: TextDirection.rtl, child: child!),
-      title: "Amoora",
-      home: LoginView(),
+          builder: (context, child) => Directionality(textDirection: TextDirection.rtl, child: child!),
+          title: "Amoora",
+          home: child,
+        ),
+        child: RegisterView(),
+      ),
     );
   }
 }

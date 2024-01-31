@@ -1,7 +1,10 @@
+import 'package:alalmiya_g2/features/get_cities/states.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../models/cities.dart';
+import '../../features/get_cities/bloc.dart';
+import '../../features/get_cities/model.dart';
 
 class CitiesSheet extends StatefulWidget {
   const CitiesSheet({Key? key}) : super(key: key);
@@ -12,45 +15,43 @@ class CitiesSheet extends StatefulWidget {
 
 class _CitiesSheetState extends State<CitiesSheet> {
   @override
-  void initState() {
-    super.initState();
-    getData();
-  }
-
-  bool isLoading = true;
-
-  late GetCitiesData model;
-  void getData() async {
-    final response = await Dio().get("https://thimar.amr.aait-d.com/api/cities/1");
-    print(response.data);
-    model = GetCitiesData.fromJson(response.data);
-    isLoading = false;
-    setState(() {});
-  }
-
-  @override
   Widget build(BuildContext context) {
+
     return Container(
         color: Colors.white,
         child: Column(
           children: [
-            SizedBox(height: 16,),
-            Text("اختر مدينتك",style: TextStyle(color: Theme.of(context).primaryColor,fontSize: 18,fontWeight: FontWeight.w700),),
-            isLoading
-                ? Expanded(
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                )
-                : Expanded(
+            SizedBox(
+              height: 16,
+            ),
+            Text(
+              "اختر مدينتك",
+              style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 18, fontWeight: FontWeight.w700),
+            ),
+            BlocBuilder<GetCitiesBloc, GetCitiesStates>(
+              // bloc: cubit,
+              builder: (context, state) {
+                if (state is GetCitiesLoadingState) {
+                  return Expanded(
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                } else if (state is GetCitiesSuccessState) {
+                  return Expanded(
                     child: ListView.builder(
                       padding: EdgeInsets.all(16),
                       itemBuilder: (context, index) => _ItemCity(
-                        model: model.list[index],
+                        model: state.list[index],
                       ),
-                      itemCount: model.list.length,
+                      itemCount: state.list.length,
                     ),
-                  ),
+                  );
+                } else {
+                  return Text("Failed");
+                }
+              },
+            ),
           ],
         )
         // child: ,

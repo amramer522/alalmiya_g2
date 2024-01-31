@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 import 'model.dart';
 
-class NotificationsView extends StatefulWidget {
-  const NotificationsView({Key? key}) : super(key: key);
+class NotificationsPage extends StatefulWidget {
+  const NotificationsPage({Key? key}) : super(key: key);
 
   @override
-  State<NotificationsView> createState() => _NotificationsViewState();
+  State<NotificationsPage> createState() => _NotificationsPageState();
 }
 
-class _NotificationsViewState extends State<NotificationsView> {
+class _NotificationsPageState extends State<NotificationsPage> {
   List<NotificationModel> list = [
     NotificationModel(
       time: "منذ ساعتان",

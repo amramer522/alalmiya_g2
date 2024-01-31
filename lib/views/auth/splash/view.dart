@@ -1,5 +1,8 @@
 import 'dart:async';
 
+import 'package:alalmiya_g2/core/logic/cache_helper.dart';
+import 'package:alalmiya_g2/main.dart';
+import 'package:alalmiya_g2/views/home/view.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 
@@ -20,7 +23,7 @@ class _SplashViewState extends State<SplashView> {
       Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => LoginView(),
+            builder: (context) => CacheHelper.isAuth() ? HomeView() : LoginView(),
           ));
     });
   }

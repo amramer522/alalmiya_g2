@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
+import 'app_image.dart';
+
 class AppInput extends StatefulWidget {
   final String labelText, icon;
   final TextEditingController? controller;
   final bool isPhone, isPassword, isEnabled;
   final double paddingBottom, paddingTop;
-  final FormFieldValidator? validator;
+  final FormFieldValidator<String?>? validator;
 
   const AppInput({Key? key,this.validator,this.controller, this.isEnabled = true, this.paddingTop = 0, this.isPassword = false, this.paddingBottom = 16, this.isPhone = false, required this.labelText, required this.icon})
       : super(key: key);
@@ -68,7 +70,7 @@ class _AppInputState extends State<AppInput> {
                 : null,
             prefixIcon: Padding(
               padding: const EdgeInsets.all(12),
-              child: Image.asset(
+              child: AppImage(
                 widget.icon,
                 fit: BoxFit.scaleDown,
                 height: 20,

@@ -14,6 +14,7 @@ class ForgetPasswordView extends StatefulWidget {
 class _ForgetPasswordViewState extends State<ForgetPasswordView> {
   bool isPasswordHidden = true;
   final formKey = GlobalKey<FormState>();
+  final phoneController =TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -61,6 +62,7 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
                     key: formKey,
                     child: AppInput(
                       labelText: "رقم الجوال",
+                      controller: phoneController,
                       icon: "assets/icons/phone.png",
                       validator:(value) {
                         if (value!.isEmpty) {
@@ -78,7 +80,7 @@ class _ForgetPasswordViewState extends State<ForgetPasswordView> {
                   AppButton(
                       onPress: () {
                         if (formKey.currentState!.validate()) {
-                          navigateTo(ConfirmCodeView(isActive: false));
+                          navigateTo(ConfirmCodeView(isActive: false,phone: phoneController.text,));
                         }
                       },
                       text: "تأكيد رقم الجوال"),

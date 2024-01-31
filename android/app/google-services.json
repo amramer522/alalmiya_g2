@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "926270719276",
+    "project_id": "thimar-course-g2",
+    "storage_bucket": "thimar-course-g2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:926270719276:android:d91046eeacb42e4f541889",
+        "android_client_info": {
+          "package_name": "com.amooor.alalmiya_g2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBXK4MamkAGL8ueampsDYNP4QAT8bCB7qY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
